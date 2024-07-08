@@ -1,0 +1,17 @@
+[app/ui]
+version = 9.2.0
+modtime = 1720354730.458089000
+
+[app/launcher]
+version = 9.2.0
+modtime = 1720354730.460157000
+
+[indexes/perfmon]
+owner = admin
+version = 9.2.0
+modtime = 1720354763.041120000
+
+[views/windows_monitoring_dashboard]
+owner = admin
+version = 9.2.0
+modtime = 1720430482.177942000
