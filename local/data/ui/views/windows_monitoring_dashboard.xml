@@ -7,7 +7,7 @@
       <fieldForValue>host</fieldForValue>
       <search>
         <query>index=perfmon | stats count by host</query>
-        <earliest>0</earliest>
+        <earliest></earliest>
         <latest></latest>
       </search>
       <choice value="*">All</choice>
@@ -24,6 +24,13 @@
         <earliest>0</earliest>
         <latest></latest>
       </search>
+    </input>
+    <input type="time" token="time">
+      <label>time picker</label>
+      <default>
+        <earliest>0</earliest>
+        <latest></latest>
+      </default>
     </input>
   </fieldset>
   <row>
@@ -92,7 +99,7 @@
       <title>Trendline Chart for CPU, Memory and Disk Usage</title>
       <chart>
         <search>
-          <query>index = perfmon
+          <query>index = perfmon $time$
 | eval cpu_usage = if(sourcetype="Perfmon:CPU Load", Value*1000, null())
 | eval mem_usage = if(sourcetype="Perfmon:Available Memory", Value/100000, null())
 | eval disk_free = if(sourcetype="Perfmon:Free Disk Space", Value, null())
@@ -100,7 +107,8 @@
   sum(cpu_usage) AS cpu_usage
   sum(mem_usage) AS mem_usage
   sum(disk_free) AS disk_free | trendline sma5(Value) as trend</query>
-          <earliest>0</earliest>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
@@ -124,16 +132,20 @@
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
         <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">none</option>
+        <option name="charting.drilldown">all</option>
         <option name="charting.layout.splitSeries">0</option>
         <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.mode">standard</option>
         <option name="charting.legend.placement">right</option>
         <option name="charting.lineWidth">2</option>
+        <option name="refresh.display">progressbar</option>
         <option name="trellis.enabled">0</option>
         <option name="trellis.scales.shared">1</option>
         <option name="trellis.size">medium</option>
+        <drilldown>
+          <set token="time">$click.value$</set>
+        </drilldown>
       </chart>
     </panel>
   </row>
